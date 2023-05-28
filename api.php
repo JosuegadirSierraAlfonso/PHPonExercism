@@ -1,21 +1,25 @@
 <?php
 
-function helloWorld()
+declare(strict_types=1);
+$color = 'violet';
+const COLORS = [
+    "black",
+    "brown",
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "violet",
+    "grey",
+    "white"
+]; 
+
+function colorCode(string $color): int
 {
-    return "---Hello, World!";
+    $index = array_search($color, COLORS);
+    return $index;
 }
-echo strrev(helloWorld());
-
-
-//other metod
-
-
-$string = 'Hello, World!';
-$n =strlen("$string");
-For($i=1;$i<=$n;$i++)
-{
-    $val= $string[-$i];
-   echo $val;
-}
+echo colorCode($color);
 
 ?>
