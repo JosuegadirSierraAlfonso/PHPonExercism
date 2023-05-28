@@ -1,25 +1,30 @@
 <?php
 
 declare(strict_types=1);
-$color = 'violet';
-const COLORS = [
-    "black",
-    "brown",
-    "red",
-    "orange",
-    "yellow",
-    "green",
-    "blue",
-    "violet",
-    "grey",
-    "white"
-]; 
-
-function colorCode(string $color): int
+$strandA = 'GAGCCTACTAACGGGAT';
+$strandB = 'CATCGTAATGACGGCCT';
+function distance(string $strandA, string $strandB): int
 {
-    $index = array_search($color, COLORS);
-    return $index;
-}
-echo colorCode($color);
+    $distance = 0;
+    if (strlen($strandA) !== strlen($strandB)) {
+        throw new InvalidArgumentException('DNA strands must be of equal length.');
+    }
+
+    // return count(
+    //     array_diff_assoc(
+    //        str_split($strandA), 
+    //         str_split($strandB)
+    //     )
+    // ); 
+
+    for ($i=0; $i < strlen($strandA) ; $i++) { 
+        if ($strandA[$i] !== $strandB[$i]) {
+            $distance++;
+        }
+    };
+    return $distance;
+}; 
+
+echo distance($strandA, $strandB);
 
 ?>
