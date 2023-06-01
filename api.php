@@ -1,20 +1,26 @@
 <?php
 
+
 declare(strict_types=1);
-
-class HighScores
+class Bob
 {
-    
-    public function __construct(array $scores)
+    public function respondTo(string $str): string
     {
-        $this->scores = $scores;
-        $this->latest = end($scores);
-        $this->personalBest = max($scores);
+    $str=trim($str);
+    if(empty($str)){
+        return "Fine. Be that way!";
+    }
+    if (preg_match('/[A-Z]+/', $str) && !preg_match('/[a-z]+/', $str)) { 
 
-        rsort($scores);
-
-        $this->personalTopThree = array_slice($scores, 0, 3);
+            if (str_ends_with($str, '?')) {
+                return 'Calm down, I know what I\'m doing!';
+            }
+            return 'Whoa, chill out!';
+        }
+    if (str_ends_with($str, '?')) {
+            return 'Sure.';
+        }
+        return 'Whatever.';
     }
 }
-
 ?>
