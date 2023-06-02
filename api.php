@@ -2,26 +2,33 @@
 
 declare(strict_types=1);
 
-function toRna(string $dna): string
+function isValid(string $number): bool
 {
-    return strtr($dna,['G' => 'C', 'C' => 'G', 'T' => 'A', 'A' => 'U']);
+    $number = str_replace(' ', '', $number);
+    if (strlen($number) < 2 or !ctype_digit($number)){
+        return false;
+    }
+    if(doubling($number)) {
+        return false;
+    }
+    return true;
+}
+function doubling(string $number)
+{
+    $length = strlen($number);
+    $even = $length % 2;
+    $sum = 0;
+    for ($i = $length - 1; $i >= 0; --$i) {
+        $char = $number[$i];
+        if ($i % 2 === $even) {
+            $char *= 2;
+            if ($char > 9) {
+                $char -= 9;
+            }
+        }
+        $sum += $char;
+    }
+    return ($sum * 9) % 10;
 }
 
-
-/* if($dna == "G"){
-    $dna = str_replace("G", "C", $dna);
-    return $dna;
-}
-else if($dna == "C"){
-    $dna = str_replace("C", "G", $dna);
-    return $dna;
-}
-else if($dna == "T"){
-    $dna = str_replace("T", "A", $dna);
-    return $dna;
-}
-else if($dna == "A"){
-    $dna = str_replace("A", "U", $dna);
-    return $dna;
-} */
 ?>
