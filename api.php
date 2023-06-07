@@ -2,50 +2,21 @@
 
 declare(strict_types=1);
 
-class Robot
+function squareOfSum(int $max): int
 {
-    private $name;
-    private static $usedNames = [];
-
-    public function __construct()
-    {
-        $this->reset();
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function reset(): void
-    {
-        $this->uniqueName();
-    }
-
-    private function uniqueName(): void
-    {
-        do {
-            $name = $this->randomName();
-        } while (in_array($name, self::$usedNames));
-
-        $this->name = $name;
-        self::$usedNames[] = $name;
-    }
-
-    private function randomName(): string
-    {
-        $letters = range('A', 'Z');
-        $digits = range(0, 9);
-
-        shuffle($letters);
-        shuffle($digits);
-
-        $randomLetters = implode(array_slice($letters, 0, 2));
-        $randomDigits = implode(array_slice($digits, 0, 3));
-
-        return $randomLetters . $randomDigits;
-    }
+    return ($max * ($max + 1) / 2) ** 2;
 }
+
+function sumOfSquares(int $max): int
+{
+    return $max * ($max + 1) * (2 * $max + 1) / 6;
+}
+
+function difference(int $max): int
+{
+    return squareOfSum($max) - sumOfSquares($max);
+}
+
 
 
 ?>
