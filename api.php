@@ -2,24 +2,50 @@
 
 declare(strict_types=1);
 
-function isIsogram(string $word): bool
+class Robot
 {
-$data = mb_str_split(preg_replace('/[\s-]/', '', mb_strtolower($word)));
-return array_unique($data) === $data;
+    private $name;
+    private static $usedNames = [];
+
+    public function __construct()
+    {
+        $this->reset();
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function reset(): void
+    {
+        $this->uniqueName();
+    }
+
+    private function uniqueName(): void
+    {
+        do {
+            $name = $this->randomName();
+        } while (in_array($name, self::$usedNames));
+
+        $this->name = $name;
+        self::$usedNames[] = $name;
+    }
+
+    private function randomName(): string
+    {
+        $letters = range('A', 'Z');
+        $digits = range(0, 9);
+
+        shuffle($letters);
+        shuffle($digits);
+
+        $randomLetters = implode(array_slice($letters, 0, 2));
+        $randomDigits = implode(array_slice($digits, 0, 3));
+
+        return $randomLetters . $randomDigits;
+    }
 }
 
-
-/* function isIsogram(string $word): bool
-{
-$word = str_replace(' ','',str_replace('-','',strtolower($word)));
-$len = array();
-foreach(str_split($word) as $letter){
-if(in_array($letter, $len)){
-return false;
-}
-$len[] = $letter;
-}
-return true;
-} */
 
 ?>
