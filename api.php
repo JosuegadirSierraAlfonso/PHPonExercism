@@ -2,19 +2,23 @@
 
 declare(strict_types=1);
 
-function squareOfSum(int $max): int
+class School
 {
-    return ($max * ($max + 1) / 2) ** 2;
-}
-
-function sumOfSquares(int $max): int
-{
-    return $max * ($max + 1) * (2 * $max + 1) / 6;
-}
-
-function difference(int $max): int
-{
-    return squareOfSum($max) - sumOfSquares($max);
+    private $school = [];
+    public function add(string $name, int $grade): void
+    {
+        $this->school[$grade][] = $name;
+        sort($this->school[$grade]);
+    }
+    public function grade(int $grade): array
+    {
+        return $this->school[$grade] ?? [];
+    }
+    public function studentsBygradeAlphabetical(): array
+    {
+        ksort($this->school);
+        return $this->school;
+    }
 }
 
 
