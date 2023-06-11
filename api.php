@@ -2,19 +2,29 @@
 
 declare(strict_types=1);
 
-function acronym(string $text): string
+function rebase(int $number, array $sequence, int $base)
 {
-    $words = mb_split('(?=[A-Z])|\W', $text);
-    
-    if (count($words) == 1) {
-        return '';
+     if ($base < 2 || $number <= 1 || count($sequence) === 0) {
+        return null;
     }
-    $acronym = [];
-    foreach ($words as $word) {
-        $acronym[] = mb_strtoupper(mb_substr($word, 0, 1));
+    $powers = count($sequence) - 1;
+    $total  = 0;
+    foreach ($sequence as $num) {
+        if ($num < 0 || $num >= $number) {
+            return null;
+        }
+        $total += $num * $number ** $powers--;
+        if ($total === 0) {
+            return null;
+        }
     }
-    return implode('', $acronym);
-
+    $digits = [];
+    while ($total > 0) {
+        $digit = $total % $base;
+        array_unshift($digits, $digit);
+        $total = intdiv($total, $base);
+    }
+    return $digits;
 }
 
 
