@@ -1,29 +1,25 @@
 <?php
 
 declare(strict_types=1);
-
-
-function encode(string $input): string
+class Series
 {
-    preg_match_all('/(.)\1*/', $input, $matches);
-    return implode(
-        array_map(
-            fn($count, $value) => ($count === 1 ? "" : strval($count)) . $value,
-            array_map(fn($match) => strlen($match), $matches[0]),
-            $matches[1]
-        )
-    );
-}
-function decode(string $input): string
-{
-    preg_match_all('/(\d*)(\D)/', $input, $matches);
-    return implode(
-        array_map(
-            fn($count, $value) => str_repeat($value, $count),
-            array_map(fn($match) => empty($match) ? 1 : intval($match), $matches[1]),
-            $matches[2]
-        )
-    );
+    public function __construct(private string $digits) {}
+    public function largestProduct(int $span): int
+    {
+        
+        if (($this->digits && (!is_numeric($this->digits) || $span < 0)) || strlen($this->digits) < $span) {
+            throw new \InvalidArgumentException;
+        }
+        if (!strlen($this->digits) || !$span) {
+            return 1;
+        }
+        
+        $max = 0;
+        for ($i = 0; $i < strlen($this->digits) - $span + 1; $i++) {
+            $max = max($max, array_product(str_split(substr($this->digits, $i, $span))));
+        }
+        return $max;
+    }
 }
 
 
