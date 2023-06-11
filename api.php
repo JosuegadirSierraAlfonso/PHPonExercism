@@ -1,12 +1,20 @@
 <?php
 
 declare(strict_types=1);
-function accumulate(array $input, callable $accumulator): array
+
+function acronym(string $text): string
 {
-    foreach ($input as &$value) {
-        $value = $accumulator($value);
+    $words = mb_split('(?=[A-Z])|\W', $text);
+    
+    if (count($words) == 1) {
+        return '';
     }
-    return $input;
+    $acronym = [];
+    foreach ($words as $word) {
+        $acronym[] = mb_strtoupper(mb_substr($word, 0, 1));
+    }
+    return implode('', $acronym);
+
 }
 
 
