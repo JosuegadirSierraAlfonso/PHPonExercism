@@ -2,61 +2,39 @@
 
 declare(strict_types=1);
 
-class Game
+function findFewestCoins(array $coins, int $input): array
 {
-    private array $rolls = [];
-    public function score(): int
-    {
-        $this->isApplicable();
-        $score = 0;
-        $fistInFrame = 0;
-        for ($i = 0; $i < 10; $i++) {
-            if ($this->rolls[$fistInFrame] === 10) {
-                if ($this->rolls[$fistInFrame + 1] !== 10) {
-                    if (($this->rolls[$fistInFrame + 1] + $this->rolls[$fistInFrame + 2]) > 10) {
-                        throw new Exception();
-                    }
-                }
-                $score += (10 + $this->rolls[$fistInFrame + 1] + $this->rolls[$fistInFrame + 2]);
-                $fistInFrame++;
+    if ($input === 0) {
+        return [];
+    }
+    if ($input < 0) {
+        throw new InvalidArgumentException('Cannot make change for negative value');
+    }
+    if ($input < $coins[0]) {
+        throw new InvalidArgumentException('No coins small enough to make change');
+    }
+    $change = [];
+    foreach (range(0, $input) as $step) {
+        if (in_array($step, $coins, true)) {
+            $change[$step] = [$step];
+            continue;
+        }
+        foreach ($coins as $coin) {
+            if ($coin > $step) {
                 continue;
             }
-            if (($this->rolls[$fistInFrame] + $this->rolls[$fistInFrame + 1]) === 10) {
-                $score += (10 + $this->rolls[$fistInFrame + 2]);
-                $fistInFrame += 2;
-                continue;
-            }
-            if (!is_null($this->rolls[$fistInFrame]) + !is_null($this->rolls[$fistInFrame + 1])) {
-                if (($this->rolls[$fistInFrame] + $this->rolls[$fistInFrame + 1]) > 10) {
-                    throw new Exception();
+            if (isset($change[$step - $coin])) {
+                $otherCoins = $change[$step - $coin];
+                if (! isset($change[$step]) || count($change[$step]) > 1 + count($otherCoins)) {
+                    $change[$step] = array_merge([$coin], $otherCoins);
                 }
-                $score += ($this->rolls[$fistInFrame] + $this->rolls[$fistInFrame + 1]);
-                $fistInFrame += 2;
             }
         }
-        return $score;
     }
-    public function roll(int $pins): void
-    {
-        if ($pins < 0 || $pins > 10) {
-            throw new Exception();
-        }
-        $this->rolls[] = $pins;
+    if (! isset($change[$input])) {
+        throw new InvalidArgumentException('No combination can add up to target');
     }
-    private function isApplicable()
-    {
-        $rollCount = count($this->rolls);
-        if (empty($this->rolls) || $rollCount < 12) {
-            throw new Exception();
-        }
-        if ($rollCount > 20 && ($this->rolls[18] + $this->rolls[19]) < 10) {
-            throw new Exception();
-        }
-        if ($rollCount > 12 && $rollCount < 21 && (end($this->rolls) === 10
-            || ($this->rolls[$rollCount - 2] + end($this->rolls)) === 10)) {
-            throw new Exception();
-        }
-    }
+    return $change[$input];
 }
 
 ?>
