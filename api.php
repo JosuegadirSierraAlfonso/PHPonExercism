@@ -2,29 +2,24 @@
 
 declare(strict_types=1);
 
-function rebase(int $number, array $sequence, int $base)
+
+function detectAnagrams(string $word, array $anagrams): array
 {
-     if ($base < 2 || $number <= 1 || count($sequence) === 0) {
-        return null;
-    }
-    $powers = count($sequence) - 1;
-    $total  = 0;
-    foreach ($sequence as $num) {
-        if ($num < 0 || $num >= $number) {
-            return null;
+    $result = [];
+    $lowerWord = strtolower($word);
+    foreach ($anagrams as $anagram){
+        $lowerAnagram = strtolower($anagram);
+        if (strlen($anagram) !== strlen($word)){
+            continue;
         }
-        $total += $num * $number ** $powers--;
-        if ($total === 0) {
-            return null;
+        if($lowerAnagram === $lowerWord){
+            continue;
+        }
+        if (count_chars($lowerAnagram) == count_chars ($lowerWord)){
+            array_push($result, $anagram);
         }
     }
-    $digits = [];
-    while ($total > 0) {
-        $digit = $total % $base;
-        array_unshift($digits, $digit);
-        $total = intdiv($total, $base);
-    }
-    return $digits;
+    return $result;
 }
 
 
