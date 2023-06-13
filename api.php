@@ -2,22 +2,23 @@
 
 declare(strict_types=1);
 
-function crypto_square(string $plaintext): string
+function diamond(string $input): array
 {
-    $text = preg_replace('#\W#', '', mb_strtolower($plaintext));
-    if ($text === '') {
-        return '';
-    }
-    $letters = mb_str_split($text);
-    $col = (int) ceil(sqrt(count($letters)));
-    $row = (int) ceil(count($letters) / $col);
-    $out = [];
-    for ($c = 0; $c < $col; $c++, $tmp = []) {
-        for ($r = 0; $r < $row; $r++) { 
-            $tmp[] = $letters[$col * $r + $c] ?? ' ';
+    $range = range('A', strtoupper($input));
+    $padding = (ord(end($range)) - ord(reset($range))) * 2 + 1;
+    $space = 1;
+    foreach ($range as $letter) {
+        if ($letter === 'A') {
+            $result[] = str_pad($letter, $padding, ' ', STR_PAD_BOTH);
+
+        } else {
+            $result[] = str_pad($letter . str_repeat(' ', $space) . $letter, $padding, ' ', STR_PAD_BOTH);
+        	$space += 2;
         }
-        $out[] = implode('', $tmp); 
     }
-    return implode(' ', $out);
+    return array_merge(
+        $result,
+        array_slice(array_reverse($result), 1)
+    );
 }
 ?>
