@@ -2,15 +2,22 @@
 
 declare(strict_types=1);
 
-function steps(int $number): int
+function crypto_square(string $plaintext): string
 {
-    if ($number <= 0) {
-        throw new InvalidArgumentException('Only positive numbers are allowed');
+    $text = preg_replace('#\W#', '', mb_strtolower($plaintext));
+    if ($text === '') {
+        return '';
     }
-    for ($step = 0; $number !== 1; $step++) {
-        $number = $number % 2 === 0 ? $number / 2 : 3 * $number + 1;
+    $letters = mb_str_split($text);
+    $col = (int) ceil(sqrt(count($letters)));
+    $row = (int) ceil(count($letters) / $col);
+    $out = [];
+    for ($c = 0; $c < $col; $c++, $tmp = []) {
+        for ($r = 0; $r < $row; $r++) { 
+            $tmp[] = $letters[$col * $r + $c] ?? ' ';
+        }
+        $out[] = implode('', $tmp); 
     }
-    return $step;
+    return implode(' ', $out);
 }
-
 ?>
